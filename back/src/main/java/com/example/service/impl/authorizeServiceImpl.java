@@ -5,6 +5,7 @@ import com.example.mapper.UserMapper;
 import com.example.service.AuthorizeService;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.MailException;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.userdetails.User;
@@ -58,7 +59,12 @@ public class authorizeServiceImpl implements AuthorizeService {
         message.setTo(email);
         message.setSubject("Code");
         message.setText("Code: " + code);
-        sender.send();
+        try{
+            sender.send();
+        } catch (MailException e) {
+            e.printStackTrace();
+        }
+
         return true;
     }
 }
