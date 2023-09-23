@@ -18,7 +18,7 @@ const logout =() => {
   </div>
 
   <div>
-    <el-button @click="logout()" type="danger" plain>Log out</el-button>
+    <el-button @click="logout" type="danger" plain>Log out</el-button>
   </div>
 </template>
 

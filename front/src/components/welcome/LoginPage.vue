@@ -59,7 +59,7 @@ const login = () => {
     </div>
 
     <div style="margin-top: 30px">
-      <el-button @click="login()" style="width: 200px; height: 30px" type="success" plain> Log in</el-button>
+      <el-button @click="login" style="width: 200px; height: 30px" type="success" plain> Log in</el-button>
     </div>
     <el-divider>
       <span style="color: grey;">No account?</span>
