@@ -2,7 +2,7 @@ package com.example.config;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.entity.RestBean;
-import com.example.service.authorizeService;
+import com.example.service.AuthorizeService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -31,7 +31,7 @@ import java.io.IOException;
 @EnableWebSecurity
 public class SecurityConfiguration {
     @Resource
-    authorizeService service;
+    AuthorizeService service;
     @Resource
     DataSource dataSource;
 
