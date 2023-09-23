@@ -1,4 +1,14 @@
 <script setup>
+import {ElMessage} from "element-plus";
+import router from "@/router";
+import {get} from "@/net";
+
+const logout =() => {
+  get('/api/auth/logout',(message) => {
+    ElMessage.success(message)
+    router.push('/')
+  })
+}
 
 </script>
 
@@ -8,7 +18,7 @@
   </div>
 
   <div>
-    <el-button type="danger" plain>Log out</el-button>
+    <el-button @click="logout()" type="danger" plain>Log out</el-button>
   </div>
 </template>
 

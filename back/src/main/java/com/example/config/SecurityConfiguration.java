@@ -6,6 +6,7 @@ import com.example.service.authorizeService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.tomcat.util.file.ConfigurationSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,6 +18,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.io.IOException;
 
@@ -41,14 +45,30 @@ public class SecurityConfiguration {
                 )
                 .logout((logout) ->
                         logout
-                                .logoutUrl("/api/auth/logout"))
+                                .logoutUrl("/api/auth/logout")
+                                .logoutSuccessHandler(this::onAuthenticationSuccess))
                 //.userDetailsService(service)
                 .csrf(AbstractHttpConfigurer::disable)
                 .exceptionHandling((handling) ->
                         handling
                                 .authenticationEntryPoint(this::onAuthenticationFailure))
+                .cors((cors) ->
+                        cors
+                                .configurationSource(this.corsConfigurationSource()))
 
                 .build();
+    }
+
+    private CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.addAllowedOriginPattern("*");
+        configuration.setAllowCredentials(true);
+        configuration.addAllowedHeader("*");
+        configuration.addAllowedMethod("*");
+        configuration.addExposedHeader("*");
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 
 
@@ -72,6 +92,11 @@ public class SecurityConfiguration {
 
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         response.setCharacterEncoding("utf-8");
-        response.getWriter().write(JSONObject.toJSONString(RestBean.success("SUCCESS")));
+        if(request.getRequestURI().endsWith("/login")) {
+            response.getWriter().write(JSONObject.toJSONString(RestBean.success("SUCCESSFULLY LOG IN")));
+        } else if(request.getRequestURI().endsWith("/logout")){
+            response.getWriter().write(JSONObject.toJSONString(RestBean.success("SUCCESSFULLY LOG OUT")));
+        }
+
     }
 }
