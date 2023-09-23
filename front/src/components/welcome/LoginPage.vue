@@ -1,6 +1,29 @@
 <script setup>
-
 import {Lock, User} from "@element-plus/icons-vue";
+import {ElMessage} from "element-plus";
+import {post} from "@/net";
+import router from "@/router";
+
+const form = reactive({
+  username:'',
+  password:'',
+  remember: false
+})
+
+const login = () => {
+  if(!form.username || !form.password) {
+    ElMessage.warning("Please enter the blanks")
+  } else {
+    post('/api/auth/login',{
+      username: form.username,
+      password: form.password,
+      remember: form.remember
+    }, (message) => {
+      ElMessage.success(message)
+      router.push('/index')
+    })
+  }
+}
 </script>
 
 <template>
@@ -11,13 +34,13 @@ import {Lock, User} from "@element-plus/icons-vue";
     </div>
 
     <div style="margin-top: 30px">
-      <el-input type="text" placeholder="Username/Email">
+      <el-input v-model="form.username" type="text" placeholder="Username/Email">
         <template #prefix>
           <el-icon><User /></el-icon>
         </template>
       </el-input>
 
-      <el-input type="password" style="margin-top: 10px" placeholder="Password">
+      <el-input v-model="form.password" type="password" style="margin-top: 10px" placeholder="Password">
         <template #prefix>
           <el-icon><Lock /></el-icon>
         </template>
@@ -27,7 +50,7 @@ import {Lock, User} from "@element-plus/icons-vue";
     <div>
       <el-row style="margin-top: 10px">
         <el-col :span="12" style="text-align: left">
-          <el-checkbox v-model="checked1" label="Remember me" size="default" />
+          <el-checkbox v-model="form.remember" label="Remember me" size="default" />
         </el-col>
         <el-col :span="12" style="text-align: right">
           <el-link>forget the password?</el-link>
@@ -36,7 +59,7 @@ import {Lock, User} from "@element-plus/icons-vue";
     </div>
 
     <div style="margin-top: 30px">
-      <el-button style="width: 200px; height: 30px" type="success" plain> Log in</el-button>
+      <el-button @click="login()" style="width: 200px; height: 30px" type="success" plain> Log in</el-button>
     </div>
     <el-divider>
       <span style="color: grey;">No account?</span>
