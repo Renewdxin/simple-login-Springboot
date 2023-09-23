@@ -1,8 +1,10 @@
 <script setup>
 import {Lock, User} from "@element-plus/icons-vue";
+import {reactive} from "vue";
 import {ElMessage} from "element-plus";
 import {post} from "@/net";
 import router from "@/router";
+
 
 const form = reactive({
   username:'',
