@@ -11,4 +11,12 @@ spring:
     port: 465
     properties:
       from: renxinhaha2023@163.com
-
+      mail:
+        smtp:
+          socketFactory:
+            class: javax.net.ssl.SSLSocketFactory
+  data:
+    redis:
+      database: 0
+      host: localhost
+      port: 6379

@@ -69,7 +69,7 @@ public class SecurityConfiguration {
                 .build();
     }
 
-    @Bean
+
     public PersistentTokenRepository tokenRepository() {
         JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
         jdbcTokenRepository.setDataSource(dataSource);

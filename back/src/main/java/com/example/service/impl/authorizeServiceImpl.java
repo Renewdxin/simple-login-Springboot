@@ -5,6 +5,7 @@ import com.example.mapper.UserMapper;
 import com.example.service.AuthorizeService;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.mail.MailException;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
@@ -13,7 +14,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class authorizeServiceImpl implements AuthorizeService {
@@ -25,6 +28,8 @@ public class authorizeServiceImpl implements AuthorizeService {
 
     @Resource
     MailSender sender;
+    @Resource
+    StringRedisTemplate template;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -51,7 +56,14 @@ public class authorizeServiceImpl implements AuthorizeService {
      * 5.用户注册时，取出对应键值对，看是否一致
      */
     @Override
-    public boolean sendVaildateEmail(String email) {
+    public boolean sendVaildateEmail(String email, String sessionId) {
+        String key = sessionId + ":" + email;
+        if(Boolean.TRUE.equals(template.hasKey(key))) {
+            Long expire = Optional.ofNullable(template.getExpire(key, TimeUnit.SECONDS)).orElse(0L) ;
+            if(expire > 120) {
+                return false;
+            }
+        }
         Random random = new Random();
         int code = random.nextInt(899999) + 100000;
         SimpleMailMessage message = new SimpleMailMessage();
@@ -61,10 +73,11 @@ public class authorizeServiceImpl implements AuthorizeService {
         message.setText("Code: " + code);
         try{
             sender.send();
+            template.opsForValue().set(key, String.valueOf(code), 3, TimeUnit.MINUTES);
+            return true;
         } catch (MailException e) {
             e.printStackTrace();
+            return false;
         }
-
-        return true;
     }
 }
