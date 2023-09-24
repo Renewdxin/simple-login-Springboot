@@ -73,7 +73,7 @@ public class SecurityConfiguration {
     public PersistentTokenRepository tokenRepository() {
         JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
         jdbcTokenRepository.setDataSource(dataSource);
-        jdbcTokenRepository.setCreateTableOnStartup(true);
+        jdbcTokenRepository.setCreateTableOnStartup(false);
         return jdbcTokenRepository;
     }
 
@@ -95,7 +95,8 @@ public class SecurityConfiguration {
         return security
                 .getSharedObject(AuthenticationManagerBuilder.class)
                 .userDetailsService(service)
-                .and().build();
+                .and()
+                .build();
     }
 
     @Bean

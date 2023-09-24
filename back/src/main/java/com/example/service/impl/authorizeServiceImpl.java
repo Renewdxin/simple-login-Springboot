@@ -7,8 +7,8 @@ import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.mail.MailException;
-import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -28,7 +28,7 @@ public class authorizeServiceImpl implements AuthorizeService {
     UserMapper userMapper;
 
     @Resource
-    MailSender sender;
+    JavaMailSender sender;
     @Resource
     StringRedisTemplate template;
 
@@ -81,12 +81,13 @@ public class authorizeServiceImpl implements AuthorizeService {
         Random random = new Random();
         int code = random.nextInt(899999) + 100000;
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom(from);
-        message.setTo(email);
         message.setSubject("Code");
         message.setText("Code: " + code);
+        message.setFrom(from);
+        message.setTo(email);
+
         try{
-            sender.send();
+            sender.send(message);
             template.opsForValue().set(key, String.valueOf(code), 3, TimeUnit.MINUTES);
             return "邮件发送成功";
         } catch (MailException e) {

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthorizeController {
-    private static final String EMAIL_REGEXP = "^(\\w+([-.][A-Za-z0-9]+)*){3,18}@\\w+([-.][A-Za-z0-9]+)*\\.\\w+([-.][A-Za-z0-9]+)*$";
+    private static final String EMAIL_REGEXP = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$";
     private static final String USERNAME_REGEXP = "^[a-zA-Z0-9\\u4e00-\\u9fa5]+$";
 
     @Resource
@@ -25,20 +25,22 @@ public class AuthorizeController {
     @PostMapping("/valid-register-email")
     public RestBean<String> validateRegisterEmail(@Pattern(regexp = EMAIL_REGEXP) @RequestParam("email") String email,
                                           HttpSession session) {
-        if ((authorizeService.sendVaildateEmail(email, session.getId(), false)) == null) {
+        String s = (authorizeService.sendVaildateEmail(email, session.getId(), false));
+        if (s == null) {
             return RestBean.success("SUCCESS");
         } else {
-            return RestBean.failure(400,"FAILURE");
+            return RestBean.failure(400,s);
         }
     }
 
     @PostMapping("/valid-reset-email")
     public RestBean<String> validateResetEmail(@Pattern(regexp = EMAIL_REGEXP) @RequestParam("email") String email,
                                           HttpSession session) {
-        if ((authorizeService.sendVaildateEmail(email, session.getId(), true)) == null) {
-            return RestBean.success("SUCCESS");
+        String s = authorizeService.sendVaildateEmail(email, session.getId(), true);
+        if (s == null) {
+            return RestBean.success("邮件已发送");
         } else {
-            return RestBean.failure(400,"FAILURE");
+            return RestBean.failure(400,s);
         }
     }
 

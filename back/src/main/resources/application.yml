@@ -8,13 +8,16 @@ spring:
     host: smtp.163.com
     username: renxinhaha2023@163.com
     password: HONMDNCGAJUMSGAH
-    port: 465
-    properties:
-      from: renxinhaha2023@163.com
-      mail:
-        smtp:
-          socketFactory:
-            class: javax.net.ssl.SSLSocketFactory
+#    port: 25
+#    properties:
+#      from: renxinhaha2023@163.com
+#      mail:
+#        smtp:
+#          auth: true
+#          starttls:
+#            enable: true
+#          socketFactory:
+#            class: javax.net.ssl.SSLSocketFactory
   data:
     redis:
       database: 0
