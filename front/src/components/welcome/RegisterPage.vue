@@ -125,7 +125,7 @@ const validateEmail = () => {
                     </el-input>
                 </el-form-item>
                 <el-form-item prop="email">
-                    <el-input v-model="form.email" type="email" placeholder="email address">
+                    <el-input v-model="form.email" type="text" placeholder="email address">
                         <template #prefix>
                             <el-icon><Message /></el-icon>
                         </template>

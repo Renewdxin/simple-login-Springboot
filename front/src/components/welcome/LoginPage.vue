@@ -67,7 +67,7 @@ const login = () => {
       <span style="color: grey;">No account?</span>
     </el-divider>
     <div>
-      <el-button style="width: 200px" type="success" plain>Sign up</el-button>
+      <el-button style="width: 200px" type="success" @click="router.push('/register')" plain>Sign up</el-button>
     </div>
   </div>
 </template>
