@@ -1,6 +1,6 @@
 package com.example.service.impl;
 
-import com.example.entity.Account;
+import com.example.entity.auth.Account;
 import com.example.mapper.UserMapper;
 import com.example.service.AuthorizeService;
 import jakarta.annotation.Resource;
@@ -40,7 +40,7 @@ public class authorizeServiceImpl implements AuthorizeService {
         if(username == null) {
             throw new UsernameNotFoundException("NOT EXIST");
         }
-        Account account = userMapper.findByNameorEmail(username);
+        Account account = userMapper.findAccountByNameorEmail(username);
 
         if(account == null) {
             throw new UsernameNotFoundException("ERROR");
@@ -69,7 +69,7 @@ public class authorizeServiceImpl implements AuthorizeService {
             }
         }
 
-        Account account = userMapper.findByNameorEmail(email);
+        Account account = userMapper.findAccountByNameorEmail(email);
         if(hasAccount && account == null) {
             return "没有该账户";
         }
