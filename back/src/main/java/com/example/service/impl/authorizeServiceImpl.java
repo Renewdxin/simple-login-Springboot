@@ -1,6 +1,6 @@
 package com.example.service.impl;
 
-import com.example.entity.account;
+import com.example.entity.Account;
 import com.example.mapper.UserMapper;
 import com.example.service.AuthorizeService;
 import jakarta.annotation.Resource;
@@ -40,7 +40,7 @@ public class authorizeServiceImpl implements AuthorizeService {
         if(username == null) {
             throw new UsernameNotFoundException("NOT EXIST");
         }
-        account account = userMapper.findByNameorEmail(username);
+        Account account = userMapper.findByNameorEmail(username);
 
         if(account == null) {
             throw new UsernameNotFoundException("ERROR");
@@ -60,8 +60,8 @@ public class authorizeServiceImpl implements AuthorizeService {
      * 5.用户注册时，取出对应键值对，看是否一致
      */
     @Override
-    public String sendVaildateEmail(String email, String sessionId) {
-        String key = sessionId + ":" + email;
+    public String sendVaildateEmail(String email, String sessionId, boolean hasAccount) {
+        String key = "email" + sessionId + ":" + email;
         if(Boolean.TRUE.equals(template.hasKey(key))) {
             Long expire = Optional.ofNullable(template.getExpire(key, TimeUnit.SECONDS)).orElse(0L) ;
             if(expire > 120) {
@@ -69,9 +69,15 @@ public class authorizeServiceImpl implements AuthorizeService {
             }
         }
 
-        if(userMapper.findByNameorEmail(email) != null) {
+        Account account = userMapper.findByNameorEmail(email);
+        if(hasAccount && account == null) {
+            return "没有该账户";
+        }
+
+        if(!hasAccount && account != null) {
             return "此账号已注册，请直接登录";
         }
+
         Random random = new Random();
         int code = random.nextInt(899999) + 100000;
         SimpleMailMessage message = new SimpleMailMessage();
@@ -91,7 +97,7 @@ public class authorizeServiceImpl implements AuthorizeService {
 
     @Override
     public String validateAndRegister(String username, String password, String email, String code, String sessionId) {
-        String key = sessionId + ":" + email;
+        String key = "email" + sessionId + ":" + email + ":false";
         if(Boolean.TRUE.equals(template.hasKey(key))) {
             String s = template.opsForValue().get(key);
             if(s == null) {
@@ -109,5 +115,29 @@ public class authorizeServiceImpl implements AuthorizeService {
         } else {
             return "请先获取验证码";
         }
+    }
+
+    @Override
+    public String validateOnly(String email, String code, String sessionId) {
+        String key = "email" + sessionId + ":" + email + ":true";
+        if(Boolean.TRUE.equals(template.hasKey(key))) {
+            String s = template.opsForValue().get(key);
+            if(s == null) {
+                return "验证码失效";
+            } else if (s.equals(code)) {
+                return null;
+            }else {
+                return "内部错误，请联系客服";
+            }
+        } else {
+            return "请先获取验证码";
+        }
+
+    }
+
+    @Override
+    public boolean resetPassword(String email, String password) {
+        password = encoder.encode(password);
+        return userMapper.resetPasswordByEmail(password, email) > 0;
     }
 }

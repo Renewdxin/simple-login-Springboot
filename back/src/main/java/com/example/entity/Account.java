@@ -1,10 +1,9 @@
 package com.example.entity;
 
 import lombok.Data;
-import org.springframework.context.annotation.Bean;
 
 @Data
-public class account {
+public class Account {
     int id;
     String username;
     String email;

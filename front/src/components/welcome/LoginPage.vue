@@ -55,7 +55,7 @@ const login = () => {
           <el-checkbox v-model="form.remember" label="Remember me" size="default" />
         </el-col>
         <el-col :span="12" style="text-align: right">
-          <el-link>forget the password?</el-link>
+          <el-link @click="router.push('/forget')">forget the password?</el-link>
         </el-col>
       </el-row>
     </div>
