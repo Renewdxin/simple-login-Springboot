@@ -10,12 +10,6 @@ class BackApplicationTests {
 
     @Test
     void contextLoads() {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setSubject("Code");
-        message.setText("Code: " + 11111);
-        message.setFrom("renxinhaha2023@162.com");
-        message.setTo("cissyrenxin@icloud.com");
-
     }
 
 }
