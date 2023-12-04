@@ -1,0 +1,12 @@
+com\example\service\AuthorizeService.class
+com\example\entity\RestBean.class
+com\example\config\SecurityConfiguration.class
+com\example\config\WebConfiguration.class
+com\example\controller\AuthorizeController.class
+com\example\controller\UserController.class
+com\example\entity\auth\Account.class
+com\example\interceptor\AuthorizeInterceptor.class
+com\example\BackApplication.class
+com\example\entity\user\accountUser.class
+com\example\mapper\UserMapper.class
+com\example\service\impl\authorizeServiceImpl.class

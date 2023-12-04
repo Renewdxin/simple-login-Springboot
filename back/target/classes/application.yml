@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://8.137.116.169:3306/my_schema?useUnicode=true&characterEncoding=utf-8
+    username: test
+    password: 123456
+  mail:
+    host: smtp.163.com
+    username: renxinhaha2023@163.com
+    password: HONMDNCGAJUMSGAH
+  data:
+    redis:
+      database: 0
+      host: 8.137.116.169
+      port: 6379
