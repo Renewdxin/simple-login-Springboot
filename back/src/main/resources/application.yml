@@ -1,25 +1,15 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/first?useUnicode=true&characterEncoding=utf-8
-    username: root
-    password: 26221030
+    url: jdbc:mysql://8.137.116.169:3306/my_schema?useUnicode=true&characterEncoding=utf-8
+    username: test
+    password: 123456
   mail:
     host: smtp.163.com
     username: renxinhaha2023@163.com
     password: HONMDNCGAJUMSGAH
-#    port: 25
-#    properties:
-#      from: renxinhaha2023@163.com
-#      mail:
-#        smtp:
-#          auth: true
-#          starttls:
-#            enable: true
-#          socketFactory:
-#            class: javax.net.ssl.SSLSocketFactory
   data:
     redis:
       database: 0
-      host: localhost
+      host: 8.137.116.169
       port: 6379

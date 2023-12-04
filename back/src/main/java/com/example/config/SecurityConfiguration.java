@@ -62,11 +62,8 @@ public class SecurityConfiguration {
                 .exceptionHandling((handling) ->
                         handling
                                 .authenticationEntryPoint(this::onAuthenticationFailure))
-                .cors((cors) ->
-                        cors
-                                .configurationSource(this.corsConfigurationSource()))
-
-                .build();
+                .cors()
+                .and().build();
     }
 
 
